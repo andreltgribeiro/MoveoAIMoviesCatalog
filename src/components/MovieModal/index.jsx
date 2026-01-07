@@ -38,7 +38,7 @@ function MovieModal({ movie, onClose }) {
             >
               <XCircleIcon className="size-12 text-zinc-100" />
             </button>
-            <motion.div className="h-[60dvh] sm:h-[80dvh] w-full">
+            <motion.div className="h-[80dvh] w-full">
               <img
                 src={movie.backdrop_path}
                 alt={movie.title}
