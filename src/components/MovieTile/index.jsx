@@ -1,40 +1,48 @@
 import { StarIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
+import { motion } from "framer-motion";
+import { getYearFromReleaseDate } from "../../Util/format";
 
-function MovieTile({ movie = {} }) {
+function MovieTile({ movie = {}, onOpen, isHidden = false }) {
   const [posterLoaded, setPosterLoaded] = useState(false);
 
   const mutableOpacityClasses = `transition-opacity duration-500 ease-in-out opacity-${
     posterLoaded ? "100" : "0"
   }`;
 
-  function getYearFromReleaseDate(releaseDate) {
-    if (!releaseDate) return null;
+  if (isHidden) {
+    return (
+      <div className="w-[90%] lg:w-[32%] aspect-video opacity-0 pointer-events-none" />
+    );
+  }
 
-    const date = new Date(releaseDate);
-    if (isNaN(date)) return null;
+  function loadBackdrop() {
+    const img = new Image();
 
-    return date.getFullYear();
+    img.src = movie.backdrop_path;
   }
 
   return (
-    <div
-      key={movie.id}
-      className="w-[90%] lg:w-[32%] aspect-video cursor-pointer flex border border-gray-500 rounded-2xl overflow-hidden hover:shadow-2xl/30 hover:-translate-y-0.5 transition duration-300 shadow-gray-100 "
+    <motion.button
+      layoutId={`movie-tile-${movie.movie_id}`}
+      onClick={() => onOpen(movie)}
+      className="w-[90%] lg:w-[32%] aspect-video cursor-pointer flex border border-gray-500 rounded-2xl overflow-hidden hover:shadow-2xl/30 shadow-gray-100 "
+      onMouseOver={() => loadBackdrop()}
     >
       <img
         src={movie.poster_path}
         loading="lazy"
         className={`min-w-[40%] ${mutableOpacityClasses}`}
         onLoad={() => setPosterLoaded(true)}
+        layoutId={`poster-${movie.id}`}
       />
       <div className={`relative w-full`}>
         <img
           src={movie.poster_path}
           loading="lazy"
-          className="absolute z-0  ${mutableOpacity}"
+          className={`absolute  ${mutableOpacityClasses}`}
         />
-        <div className="p-4 h-full text-zinc-50 backdrop-blur-lg bg-zinc-800/40 flex flex-col items-start justify-end gap-0.5">
+        <div className="p-4 h-full text-zinc-50 backdrop-blur-lg bg-zinc-800/40 flex flex-col items-start justify-end gap-0.5 text-left">
           <small>{getYearFromReleaseDate(movie.release_date)}</small>
           <p className="text-xl md:text-2xl font-bold">
             {movie.original_title}
@@ -56,7 +64,7 @@ function MovieTile({ movie = {} }) {
           )}
         </div>
       </div>
-    </div>
+    </motion.button>
   );
 }
 

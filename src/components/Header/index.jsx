@@ -42,7 +42,6 @@ function Header({ setSearchInput, canSearch, loadingNumbers }) {
         {(canSearch || searchAnyway) && (
           <form className="relative">
             <input
-              disabled
               type="text"
               placeholder="Search..."
               className="relative h-10 pl-10 pr-2 rounded-sm bg-gray-950/50 lg:w-130 border border-zinc-400 text-zinc-50"
