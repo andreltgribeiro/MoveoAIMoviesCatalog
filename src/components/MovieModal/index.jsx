@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { StarIcon, XCircleIcon } from "@heroicons/react/24/solid";
 import { getYearFromReleaseDate } from "../../Util/format";
 import ProfileImage from "../../assets/profile.jpg";
+
 function ModalPortal({ children }) {
   return createPortal(children, document.body);
 }

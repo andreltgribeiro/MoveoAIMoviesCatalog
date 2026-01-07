@@ -32,6 +32,7 @@ function MovieTile({ movie = {}, onOpen, isHidden = false }) {
     >
       <img
         src={movie.poster_path}
+        alt={movie.original_title}
         loading="lazy"
         className={`min-w-[40%] ${mutableOpacityClasses}`}
         onLoad={() => setPosterLoaded(true)}
@@ -40,6 +41,7 @@ function MovieTile({ movie = {}, onOpen, isHidden = false }) {
       <div className={`relative w-full`}>
         <img
           src={movie.poster_path}
+          alt={movie.original_title}
           loading="lazy"
           className={`absolute  ${mutableOpacityClasses}`}
         />
