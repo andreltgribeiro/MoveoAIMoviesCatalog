@@ -23,9 +23,9 @@ function MovieList({ movies = [] }) {
       </AnimatePresence>
 
       <div className="flex flex-wrap gap-4 justify-center">
-        {movies.map((movie) => (
+        {movies.map((movie, i) => (
           <MovieTile
-            key={movie.movie_id}
+            key={`${movie.movie_id}-${i}`}
             movie={movie}
             onOpen={setSelected}
             isHidden={selected?.movie_id === movie.movie_id}

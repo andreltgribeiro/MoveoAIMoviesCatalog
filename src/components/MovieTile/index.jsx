@@ -23,7 +23,8 @@ function MovieTile({ movie = {}, onOpen, isHidden = false }) {
   }
 
   return (
-    <motion.button
+    <motion.div
+      key={`movie-tile-${movie.movie_id}`}
       layoutId={`movie-tile-${movie.movie_id}`}
       onClick={() => onOpen(movie)}
       className="w-[90%] lg:w-[32%] aspect-video cursor-pointer flex border border-gray-500 rounded-2xl overflow-hidden hover:shadow-2xl/30 shadow-gray-100 "
@@ -64,7 +65,7 @@ function MovieTile({ movie = {}, onOpen, isHidden = false }) {
           )}
         </div>
       </div>
-    </motion.button>
+    </motion.div>
   );
 }
 
