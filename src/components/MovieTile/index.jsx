@@ -34,7 +34,7 @@ function MovieTile({ movie = {}, onOpen, isHidden = false }) {
         src={movie.poster_path}
         alt={movie.original_title}
         loading="lazy"
-        className={`min-w-[40%] ${mutableOpacityClasses}`}
+        className={`min-w-[40%] w-[40%] ${mutableOpacityClasses}`}
         onLoad={() => setPosterLoaded(true)}
         layoutId={`poster-${movie.id}`}
       />
