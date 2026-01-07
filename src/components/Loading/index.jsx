@@ -1,9 +1,9 @@
 function Loading() {
   return (
-    <div className="h-[calc(100vh-164px)] w-full flex justify-center items-center">
+    <div className="h-25 w-full flex justify-center items-center">
       <div aria-label="Loading..." role="status">
         <svg
-          className="h-12 w-12 animate-spin stroke-gray-500"
+          className="h-12 w-12 animate-spin stroke-gray-50"
           viewBox="0 0 256 256"
         >
           <line
