@@ -19,7 +19,7 @@ function Header({ setSearchInput }) {
 
   return (
     <header
-      className={`sticky top-0 z-50 bg-gray-950/50 shadow-m transition duration-1000 ${
+      className={`sticky top-0 z-50 bg-gray-950/50 shadow-m transition duration-300 ${
         isScrolled && "backdrop-blur-lg"
       }`}
     >
