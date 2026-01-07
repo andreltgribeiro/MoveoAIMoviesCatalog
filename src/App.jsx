@@ -5,7 +5,6 @@ import Loading from "./components/Loading";
 import MovieList from "./components/MovieList";
 import { useMovies } from "./hooks/useMovies";
 import LoadMore from "./components/LoadMore";
-import localData from "./local.json";
 
 const LOCAL_PAGE_SIZE = 20;
 
