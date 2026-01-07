@@ -37,7 +37,7 @@ function App() {
   return (
     <>
       <Header setSearchInput={setSearch} />
-      <main className="h-screen p-4">
+      <main className="p-4">
         {success && <MovieList movies={filteredMovies} />}
         {errored && <Error />}
         {loading && <Loading />}
