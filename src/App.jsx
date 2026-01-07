@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useEffectEvent, useMemo, useState } from "react";
 import Error from "./components/Error";
 import Header from "./components/Header";
 import Loading from "./components/Loading";
@@ -21,6 +21,14 @@ function App() {
     error,
     isError,
   } = useMovies();
+
+  const resetVisibleCount = useEffectEvent((size) => {
+    setVisibleCount(size);
+  });
+
+  useEffect(() => {
+    if (search) resetVisibleCount(LOCAL_PAGE_SIZE);
+  }, [search]);
 
   const totalMoviesCount = data?.pages[0]?.total || 0;
 
