@@ -1,18 +1,31 @@
 import { StarIcon } from "@heroicons/react/24/solid";
+import { useEffect, useRef, useState } from "react";
 
 function MovieTile({ movie = {} }) {
+  const [posterLoaded, setPosterLoaded] = useState(false);
+
+  const mutableOpacityClasses = `transition-opacity duration-500 ease-in-out opacity-${
+    posterLoaded ? "100" : "0"
+  }`;
+
   return (
     <div
       key={movie.id}
       className="h-84 cursor-pointer flex border border-gray-500 rounded-2xl overflow-hidden w-135 hover:shadow-2xl/30 hover:-translate-y-0.5 transition duration-300 shadow-gray-100 "
     >
-      <img src={movie.poster_path} loading="lazy" className="min-w-55" />
-      <div
-        className="bg-cover bg-center w-full"
-        style={{
-          backgroundImage: `url('${movie.poster_path}}')`,
-        }}
-      >
+      <img
+        src={movie.poster_path}
+        loading="lazy"
+        className={`min-w-55 ${mutableOpacityClasses}`}
+        onLoad={() => setPosterLoaded(true)}
+      />
+      <div className={`relative w-full`}>
+        <div
+          class="absolute inset-0 bg-cover bg-center z-0 ${mutableOpacity}"
+          style={{
+            backgroundImage: `url('${movie.poster_path}')`,
+          }}
+        ></div>
         <div className="p-4 h-full text-zinc-50 backdrop-blur-lg bg-zinc-800/40 flex flex-col items-start justify-end gap-0.5">
           <p className="text-2xl font-bold">{movie.original_title}</p>
           <small>({movie.release_date})</small>
