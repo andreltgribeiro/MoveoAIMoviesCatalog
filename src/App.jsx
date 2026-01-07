@@ -30,26 +30,33 @@ function App() {
     if (search) resetVisibleCount(LOCAL_PAGE_SIZE);
   }, [search]);
 
-  const totalMoviesCount = data?.pages[0]?.total || 0;
+  useEffect(() => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   const allMovies = useMemo(() => {
     if (!data?.pages) return [];
     return data.pages.flatMap((p) => p.data);
   }, [data]);
 
-  const filteredMovies = useMemo(() => {
-    const q = search.trim().toLowerCase();
-    if (!q) return allMovies.slice(0, visibleCount);
-    return allMovies
-      .filter((m) => (m.original_title ?? "").toLowerCase().includes(q))
-      .slice(0, visibleCount);
-  }, [allMovies, search, visibleCount]);
+  const totalMoviesCount = useMemo(() => {
+    const total = Number(data?.pages?.[0]?.total);
+    return Number.isFinite(total) && total > 0 ? total : allMovies.length;
+  }, [data, allMovies.length]);
 
-  useEffect(() => {
-    if (hasNextPage && !isFetchingNextPage) {
-      fetchNextPage();
-    }
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+  const filteredAllMovies = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    if (!q) return allMovies;
+    return allMovies.filter((m) =>
+      (m.original_title ?? "").toLowerCase().includes(q)
+    );
+  }, [allMovies, search]);
+
+  const visibleMovies = useMemo(() => {
+    return filteredAllMovies.slice(0, visibleCount);
+  }, [filteredAllMovies, visibleCount]);
 
   const loading = ["loading", "pending"].includes(status);
   const errored = ["error"].includes(status) || isError;
@@ -59,11 +66,11 @@ function App() {
     <>
       <Header
         setSearchInput={setSearch}
-        canSearch={allMovies.length >= totalMoviesCount}
+        doneLoading={allMovies.length >= totalMoviesCount}
         loadingNumbers={`${allMovies.length}/${totalMoviesCount}`}
       />
       <main className="p-4 flex flex-col gap-10">
-        {success && <MovieList movies={filteredMovies} />}
+        {success && <MovieList movies={visibleMovies} />}
         {errored && <Error error={error} />}
         {loading && <Loading />}
 
