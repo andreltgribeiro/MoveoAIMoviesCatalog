@@ -1,5 +1,5 @@
 import { StarIcon } from "@heroicons/react/24/solid";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
 function MovieTile({ movie = {} }) {
   const [posterLoaded, setPosterLoaded] = useState(false);
@@ -7,6 +7,15 @@ function MovieTile({ movie = {} }) {
   const mutableOpacityClasses = `transition-opacity duration-500 ease-in-out opacity-${
     posterLoaded ? "100" : "0"
   }`;
+
+  function getYearFromReleaseDate(releaseDate) {
+    if (!releaseDate) return null;
+
+    const date = new Date(releaseDate);
+    if (isNaN(date)) return null;
+
+    return date.getFullYear();
+  }
 
   return (
     <div
@@ -27,8 +36,8 @@ function MovieTile({ movie = {} }) {
           }}
         ></div>
         <div className="p-4 h-full text-zinc-50 backdrop-blur-lg bg-zinc-800/40 flex flex-col items-start justify-end gap-0.5">
+          <small>{getYearFromReleaseDate(movie.release_date)}</small>
           <p className="text-2xl font-bold">{movie.original_title}</p>
-          <small>({movie.release_date})</small>
           <p className="max-h-50 line-clamp-3" title={movie.overview}>
             {movie.overview}
           </p>
