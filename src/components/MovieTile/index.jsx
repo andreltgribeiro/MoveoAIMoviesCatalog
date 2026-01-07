@@ -29,12 +29,11 @@ function MovieTile({ movie = {} }) {
         onLoad={() => setPosterLoaded(true)}
       />
       <div className={`relative w-full`}>
-        <div
-          class="absolute inset-0 bg-cover bg-center z-0 ${mutableOpacity}"
-          style={{
-            backgroundImage: `url('${movie.poster_path}')`,
-          }}
-        ></div>
+        <img
+          src={movie.poster_path}
+          loading="lazy"
+          className="absolute z-0  ${mutableOpacity}"
+        />
         <div className="p-4 h-full text-zinc-50 backdrop-blur-lg bg-zinc-800/40 flex flex-col items-start justify-end gap-0.5">
           <small>{getYearFromReleaseDate(movie.release_date)}</small>
           <p className="text-2xl font-bold">{movie.original_title}</p>
