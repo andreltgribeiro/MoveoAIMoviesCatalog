@@ -4,12 +4,18 @@ import Header from "./components/Header";
 import Loading from "./components/Loading";
 import MovieList from "./components/MovieList";
 import { useMovies } from "./hooks/useMovies";
+import LoadMore from "./components/LoadMore";
+
+const LOCAL_PAGE_SIZE = 20;
 
 function App() {
+  const [visibleCount, setVisibleCount] = useState(LOCAL_PAGE_SIZE);
   const [search, setSearch] = useState("");
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
     useMovies();
+
+  const totalMoviesCount = data?.pages[0]?.total || 0;
 
   const allMovies = useMemo(() => {
     if (!data?.pages) return [];
@@ -18,17 +24,17 @@ function App() {
 
   const filteredMovies = useMemo(() => {
     const q = search.trim().toLowerCase();
-    if (!q) return allMovies;
-    return allMovies.filter((m) =>
-      (m.original_title ?? "").toLowerCase().includes(q)
-    );
-  }, [allMovies, search]);
+    if (!q) return allMovies.slice(0, visibleCount);
+    return allMovies
+      .filter((m) => (m.original_title ?? "").toLowerCase().includes(q))
+      .slice(0, visibleCount);
+  }, [allMovies, search, visibleCount]);
 
-  // useEffect(() => {
-  //   if (hasNextPage && !isFetchingNextPage) {
-  //     fetchNextPage();
-  //   }
-  // }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+  useEffect(() => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   const loading = ["loading", "pending"].includes(status);
   const errored = ["error"].includes(status);
@@ -36,22 +42,22 @@ function App() {
 
   return (
     <>
-      <Header setSearchInput={setSearch} />
+      <Header
+        setSearchInput={setSearch}
+        canSearch={allMovies.length >= totalMoviesCount}
+        loadingNumbers={`${allMovies.length}/${totalMoviesCount}`}
+      />
       <main className="p-4">
         {success && <MovieList movies={filteredMovies} />}
         {errored && <Error />}
         {loading && <Loading />}
 
-        <button
-          onClick={() => fetchNextPage()}
-          disabled={!hasNextPage || isFetchingNextPage}
-        >
-          {isFetchingNextPage
-            ? "Loading..."
-            : hasNextPage
-            ? "Load more"
-            : "You're Done!"}
-        </button>
+        <LoadMore
+          visibleCount={visibleCount}
+          totalMoviesCount={totalMoviesCount}
+          setVisibleCount={setVisibleCount}
+          pageSize={LOCAL_PAGE_SIZE}
+        />
       </main>
     </>
   );
